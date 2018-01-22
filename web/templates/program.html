@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="{% static "css/markdown.css" %}">
+</head>
+<body>
+<h3>生成基础源码</h3>
+<pre><code class="language-python">
+import requests
+from lxml import etree
+
+
+class Spider:
+
+    def __init__(self):
+        self.url = "{{html.url}}"                          
+        self.headers = {{html.headers}}                          
+        self.data ={% if html.data %}{{html.data}}{% else %}{}{% endif %}
+        self.cookies = {% if html.cookies %}{{html.cookies}}{% else %}{}{% endif %}
+
+    def get_url(self):
+        html = requests.post(url=self.url, headers=self.headers, data=self.data).text
+        print(html)
+        
+if __name__ == '__main__':
+    A = Spider()
+    A.get_url()
+</code></pre>
+<form method="post">
+{% csrf_token %}
+{{ form }}
+<input type="submit" value="提交">
+</form>
+
+<h3>爬取到的数据</h3>
+<pre><code class="language-python">
+{% if html_xpath %}
+    {% for i in html_xpath %}
+    <p>{{ i }}</p>
+    {% endfor %}
+{% else %}
+    <p>未获取到任何值</p>
+{% endif %}
+</code></pre>
+
+</body>
+</html>
